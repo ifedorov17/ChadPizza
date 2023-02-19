@@ -1,2 +1,2 @@
-# chad-pizza
-Simple Spring application for ordering pizza
+# Chad Pizza
+Приложение SpringBoot для заказа пиццы
