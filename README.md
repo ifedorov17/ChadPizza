@@ -1,2 +1,2 @@
 # Chad Pizza
-Приложение SpringBoot для заказа пиццы
+Приложение SpringBoot + ReactJS для заказа пиццы
