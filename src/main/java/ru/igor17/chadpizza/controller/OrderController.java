@@ -30,6 +30,7 @@ import static ru.igor17.chadpizza.model.Status.PAID;
 
 @RestController
 @RequiredArgsConstructor
+@CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("/order")
 public class OrderController {
 
@@ -41,7 +42,6 @@ public class OrderController {
 
 	private final OrderPositionDAO orderPositionDAO;
 
-	@CrossOrigin(origins = "http://localhost:3000")
 	@PostMapping
 	public ResponseEntity<Order> create(@RequestBody Order order) {
 		/*if (customerDAO.get(order.getUserID()) == null) {
@@ -54,7 +54,6 @@ public class OrderController {
 		return new ResponseEntity<>(order, HttpStatus.OK);
 	}
 
-	@CrossOrigin(origins = "http://localhost:3000")
 	@PutMapping("/position")
 	public ResponseEntity<Order> addOrderPosition(@RequestBody OrderPosition orderPosition) {
 
@@ -78,13 +77,11 @@ public class OrderController {
 		return new ResponseEntity<>(order, HttpStatus.OK);
 	}
 
-	@CrossOrigin(origins = "http://localhost:3000")
 	@GetMapping
 	public ResponseEntity<List<Order>> getAll() {
 		return new ResponseEntity<>(orderDAO.getAll(), HttpStatus.OK);
 	}
 
-	@CrossOrigin(origins = "http://localhost:3000")
 	@GetMapping("/paid")
 	public ResponseEntity<List<Order>> getAllPaid() {
 		return new ResponseEntity<>(
@@ -92,7 +89,6 @@ public class OrderController {
 				HttpStatus.OK);
 	}
 
-	@CrossOrigin(origins = "http://localhost:3000")
 	@PutMapping("/status")
 	public ResponseEntity<Order> changeStatus(@RequestBody Order fakeOrder) {
 		if (fakeOrder.getId() == null) {
