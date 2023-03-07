@@ -3,6 +3,7 @@ package ru.igor17.chadpizza.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -40,11 +41,12 @@ public class OrderController {
 
 	private final OrderPositionDAO orderPositionDAO;
 
+	@CrossOrigin(origins = "http://localhost:3000")
 	@PostMapping
 	public ResponseEntity<Order> create(@RequestBody Order order) {
-		if (customerDAO.get(order.getUserID()) == null) {
+		/*if (customerDAO.get(order.getUserID()) == null) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Cannot find user with given userID");
-		}
+		}*/
 		order.setOrderDateTime(LocalDateTime.now());
 		order.setStatus(Status.DRAFT);
 		order.setTotalPrice(0.0f);
@@ -52,6 +54,7 @@ public class OrderController {
 		return new ResponseEntity<>(order, HttpStatus.OK);
 	}
 
+	@CrossOrigin(origins = "http://localhost:3000")
 	@PutMapping("/position")
 	public ResponseEntity<Order> addOrderPosition(@RequestBody OrderPosition orderPosition) {
 
@@ -75,11 +78,13 @@ public class OrderController {
 		return new ResponseEntity<>(order, HttpStatus.OK);
 	}
 
+	@CrossOrigin(origins = "http://localhost:3000")
 	@GetMapping
 	public ResponseEntity<List<Order>> getAll() {
 		return new ResponseEntity<>(orderDAO.getAll(), HttpStatus.OK);
 	}
 
+	@CrossOrigin(origins = "http://localhost:3000")
 	@GetMapping("/paid")
 	public ResponseEntity<List<Order>> getAllPaid() {
 		return new ResponseEntity<>(
@@ -87,6 +92,7 @@ public class OrderController {
 				HttpStatus.OK);
 	}
 
+	@CrossOrigin(origins = "http://localhost:3000")
 	@PutMapping("/status")
 	public ResponseEntity<Order> changeStatus(@RequestBody Order fakeOrder) {
 		if (fakeOrder.getId() == null) {
