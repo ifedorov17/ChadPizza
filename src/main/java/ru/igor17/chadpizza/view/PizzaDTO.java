@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class PizzaAddDTO {
+public class PizzaDTO {
 
 	private String name;
 

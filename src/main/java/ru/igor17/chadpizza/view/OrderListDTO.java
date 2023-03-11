@@ -11,8 +11,6 @@ import java.util.List;
 @NoArgsConstructor
 public class OrderListDTO {
 
-	private Long id;
-
 	private String customerFIO;
 
 	private String customerPhoneNumber;

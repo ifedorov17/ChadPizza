@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class BaseDAO<T extends BaseModel>{
+public abstract class BaseDAO<T extends BaseModel>{
 
 	protected ConcurrentHashMap<Long, T> db = new ConcurrentHashMap<>();
 
