@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class BaseModel {
+public abstract class BaseModel {
 
 	private Long id;
 

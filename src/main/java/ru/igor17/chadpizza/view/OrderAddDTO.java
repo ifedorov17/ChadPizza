@@ -11,7 +11,11 @@ import java.util.List;
 @NoArgsConstructor
 public class OrderAddDTO {
 
-	private String customerFIO;
+	private String customerFirstName;
+
+	private String customerMiddleName;
+
+	private String customerSurname;
 
 	private String customerPhoneNumber;
 
