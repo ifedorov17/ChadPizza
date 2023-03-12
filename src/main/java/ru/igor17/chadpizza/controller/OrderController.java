@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -12,21 +13,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
-import ru.igor17.chadpizza.dao.CustomerDAO;
-import ru.igor17.chadpizza.dao.OrderDAO;
-import ru.igor17.chadpizza.dao.OrderPositionDAO;
-import ru.igor17.chadpizza.dao.PizzaDAO;
-
 import ru.igor17.chadpizza.model.Order;
-import ru.igor17.chadpizza.model.OrderPosition;
-import ru.igor17.chadpizza.model.Pizza;
-import ru.igor17.chadpizza.model.Status;
+import ru.igor17.chadpizza.service.OrderService;
+import ru.igor17.chadpizza.view.OrderAddDTO;
+import ru.igor17.chadpizza.view.OrderChangeStatusDTO;
+import ru.igor17.chadpizza.view.OrderListDTO;
 
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
-
-import static ru.igor17.chadpizza.model.Status.PAID;
 
 @RestController
 @RequiredArgsConstructor
@@ -34,72 +27,36 @@ import static ru.igor17.chadpizza.model.Status.PAID;
 @RequestMapping("/order")
 public class OrderController {
 
-	private final OrderDAO orderDAO;
-
-	private final CustomerDAO customerDAO;
-
-	private final PizzaDAO pizzaDAO;
-
-	private final OrderPositionDAO orderPositionDAO;
+	private final OrderService orderService;
 
 	@PostMapping
-	public ResponseEntity<Order> create(@RequestBody Order order) {
-		/*if (customerDAO.get(order.getUserID()) == null) {
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Cannot find user with given userID");
-		}*/
-		order.setOrderDateTime(LocalDateTime.now());
-		order.setStatus(Status.DRAFT);
-		order.setTotalPrice(0.0f);
-		orderDAO.insert(order);
+	public ResponseEntity<Order> create(@RequestBody OrderAddDTO orderAddDTO) {
+		final Order order = orderService.createEntity(orderAddDTO);
 		return new ResponseEntity<>(order, HttpStatus.OK);
 	}
 
-	@PutMapping("/position")
-	public ResponseEntity<Order> addOrderPosition(@RequestBody OrderPosition orderPosition) {
-
-		final Pizza pizza = pizzaDAO.get(orderPosition.getPizzaID());
-		if (pizza == null) {
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Cannot find pizza with given pizzaID");
-		}
-
-		final Order order = orderDAO.get(orderPosition.getOrderID());
-		if (order == null) {
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Cannot find order with given orderID");
-		}
-
-		if (orderPosition.getCount() < 0) {
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Count cannot be negative");
-		}
-
-		order.setTotalPrice(order.getTotalPrice() + pizza.getPrice() * orderPosition.getCount());
-		orderPositionDAO.insert(orderPosition);
-
+	@GetMapping("/{id}")
+	public ResponseEntity<OrderListDTO> get(@PathVariable final Long id) {
+		final OrderListDTO order = orderService.getById(id);
 		return new ResponseEntity<>(order, HttpStatus.OK);
 	}
 
 	@GetMapping
-	public ResponseEntity<List<Order>> getAll() {
-		return new ResponseEntity<>(orderDAO.getAll(), HttpStatus.OK);
+	public ResponseEntity<List<OrderListDTO>> getAll() {
+		return new ResponseEntity<>(orderService.getAll(), HttpStatus.OK);
 	}
 
 	@GetMapping("/paid")
-	public ResponseEntity<List<Order>> getAllPaid() {
-		return new ResponseEntity<>(
-				orderDAO.getAll().stream().filter(order -> PAID == order.getStatus()).collect(Collectors.toList()),
-				HttpStatus.OK);
+	public ResponseEntity<List<OrderListDTO>> getAllPaid() {
+		return new ResponseEntity<>(orderService.getAllPaid(), HttpStatus.OK);
 	}
 
 	@PutMapping("/status")
-	public ResponseEntity<Order> changeStatus(@RequestBody Order fakeOrder) {
-		if (fakeOrder.getId() == null) {
+	public ResponseEntity<Order> changeStatus(@RequestBody OrderChangeStatusDTO changeStatusDTO) {
+		if (changeStatusDTO.getOrderId() == null) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "ID mustn't be null!");
 		}
-		final Order order = orderDAO.get(fakeOrder.getId());
-		if (order == null) {
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Cannot find order with given orderID");
-		}
-
-		order.setStatus(fakeOrder.getStatus());
+		final Order order = orderService.changeStatus(changeStatusDTO);
 		return new ResponseEntity<>(order, HttpStatus.OK);
 	}
 

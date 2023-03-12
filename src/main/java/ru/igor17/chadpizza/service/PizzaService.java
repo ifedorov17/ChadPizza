@@ -8,6 +8,8 @@ import ru.igor17.chadpizza.dao.PizzaDAO;
 import ru.igor17.chadpizza.model.Pizza;
 import ru.igor17.chadpizza.view.PizzaDTO;
 
+import java.util.List;
+
 @Getter
 @Setter
 @RequiredArgsConstructor
@@ -15,6 +17,31 @@ import ru.igor17.chadpizza.view.PizzaDTO;
 public class PizzaService {
 
 	private final PizzaDAO pizzaDAO;
+
+	public List<PizzaDTO> getAll() {
+		return pizzaDAO.getAll().stream()
+				.map(this::entityToDto)
+				.toList();
+	}
+
+	public PizzaDTO getById(final Long id) {
+		return entityToDto(pizzaDAO.getById(id));
+	}
+
+	public Pizza createEntity(final PizzaDTO dto) {
+		final Pizza pizza = dtoToEntity(dto);
+		pizzaDAO.insert(pizza);
+		return pizza;
+	}
+
+	public Pizza updateEntity(final PizzaDTO dto) {
+		final Pizza pizza = pizzaDAO.getById(Long.parseLong(dto.getId()));
+		pizza.setPrice(Float.parseFloat(dto.getPrice()));
+		pizza.setName(dto.getName());
+		pizza.setDescription(dto.getDescription());
+		pizzaDAO.update(pizza);
+		return pizza;
+	}
 
 	private Pizza dtoToEntity(final PizzaDTO dto) {
 		final Pizza pizza = new Pizza();

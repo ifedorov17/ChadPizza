@@ -19,7 +19,7 @@ public abstract class BaseDAO<T extends BaseModel>{
 		db.put(model.getId(), model);
 	}
 
-	public T get(Long id) {
+	public T getById(Long id) {
 		return db.get(id);
 	}
 
