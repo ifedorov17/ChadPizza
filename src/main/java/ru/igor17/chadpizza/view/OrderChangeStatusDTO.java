@@ -7,14 +7,10 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class PizzaDTO {
+public class OrderChangeStatusDTO {
 
-	private String id;
+	private String orderId;
 
-	private String name;
-
-	private String description;
-
-	private String price;
+	private String status;
 
 }

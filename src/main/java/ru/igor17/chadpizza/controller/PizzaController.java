@@ -11,11 +11,10 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ResponseStatusException;
-
-import ru.igor17.chadpizza.dao.PizzaDAO;
 
 import ru.igor17.chadpizza.model.Pizza;
+import ru.igor17.chadpizza.service.PizzaService;
+import ru.igor17.chadpizza.view.PizzaDTO;
 
 import java.util.List;
 
@@ -26,35 +25,26 @@ import java.util.List;
 @RequestMapping("/pizza")
 public class PizzaController {
 
-	private final PizzaDAO pizzaDAO;
+	private final PizzaService pizzaService;
 
 	@GetMapping
-	public ResponseEntity<List<Pizza>> getAll() {
-		return new ResponseEntity<>(pizzaDAO.getAll(), HttpStatus.OK);
+	public ResponseEntity<List<PizzaDTO>> getAll() {
+		return new ResponseEntity<>(pizzaService.getAll(), HttpStatus.OK);
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<Pizza> get(@PathVariable final Long id) {
-		Pizza pizza = pizzaDAO.get(id);
-		if (pizza == null) {
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Unable to find resource");
-		}
-		return new ResponseEntity<>(pizza, HttpStatus.OK);
+	public ResponseEntity<PizzaDTO> get(@PathVariable final Long id) {
+		return new ResponseEntity<>(pizzaService.getById(id), HttpStatus.OK);
 	}
 
 	@PostMapping
-	public ResponseEntity<Pizza> create(@RequestBody final Pizza pizza) {
-		pizzaDAO.insert(pizza);
-		return new ResponseEntity<>(pizza, HttpStatus.OK);
+	public ResponseEntity<Pizza> create(@RequestBody final PizzaDTO pizzaDTO) {
+		return new ResponseEntity<>(pizzaService.createEntity(pizzaDTO), HttpStatus.OK);
 	}
 
-	@PutMapping("/{id}")
-	public ResponseEntity<Pizza> update(@PathVariable final Long id, @RequestBody final Pizza pizza) {
-		if (pizzaDAO.get(id) == null) {
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Unable to find resource");
-		}
-		pizzaDAO.update(pizza);
-		return new ResponseEntity<>(pizza, HttpStatus.OK);
+	@PutMapping
+	public ResponseEntity<Pizza> update(@RequestBody final PizzaDTO pizzaDTO) {
+		return new ResponseEntity<>(pizzaService.updateEntity(pizzaDTO), HttpStatus.OK);
 	}
 
 }

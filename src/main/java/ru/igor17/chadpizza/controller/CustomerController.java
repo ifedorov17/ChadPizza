@@ -24,7 +24,7 @@ import java.util.List;
 @CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("/customer")
 public class CustomerController {
-
+//MAY BE DEPRECATED IN FURTHER VERSIONS
 	private final CustomerDAO customerDAO;
 
 	@GetMapping
@@ -34,14 +34,14 @@ public class CustomerController {
 
 	@GetMapping("/{id}")
 	public ResponseEntity<Customer> get(@PathVariable final Long id) {
-		Customer customer = customerDAO.get(id);
+		Customer customer = customerDAO.getById(id);
 		if (customer == null) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Unable to find resource");
 		}
 		return new ResponseEntity<>(customer, HttpStatus.OK);
 	}
 
-	@CrossOrigin(origins = "http://localhost:3000")
+
 	@PostMapping
 	public ResponseEntity<Customer> create(@RequestBody final Customer customer) {
 		customerDAO.insert(customer);
@@ -51,7 +51,7 @@ public class CustomerController {
 
 	@PutMapping("/{id}")
 	public ResponseEntity<Customer> update(@PathVariable final Long id, @RequestBody final Customer customer) {
-		if (id == null || customerDAO.get(id) == null) {
+		if (id == null || customerDAO.getById(id) == null) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Unable to find resource");
 		}
 		customerDAO.update(customer);
