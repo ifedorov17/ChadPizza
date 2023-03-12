@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class PizzaDTO {
+public class PizzaDTO extends BaseDTO {
 
 	private String id;
 

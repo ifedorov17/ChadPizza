@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class OrderChangeStatusDTO {
+public class OrderChangeStatusDTO extends BaseDTO {
 
 	private String orderId;
 

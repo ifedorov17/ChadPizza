@@ -9,7 +9,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-public class OrderAddDTO {
+public class OrderAddDTO extends BaseDTO {
 
 	private String customerFirstName;
 
