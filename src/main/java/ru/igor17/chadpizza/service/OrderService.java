@@ -28,7 +28,7 @@ import static ru.igor17.chadpizza.model.Status.PAID;
 @Setter
 @RequiredArgsConstructor
 @Service
-public class OrderService {
+public class OrderService implements IBaseService<Order,OrderListDTO> {
 
 	private final OrderDAO orderDAO;
 
@@ -52,14 +52,26 @@ public class OrderService {
 		return order;
 	}
 
+	@Override
 	public OrderListDTO getById(final Long id) {
 		return entityToOrderListDto(orderDAO.getById(id));
 	}
 
+	@Override
 	public List<OrderListDTO> getAll() {
 		return orderDAO.getAll().stream()
 				.map(this::entityToOrderListDto)
 				.toList();
+	}
+
+	@Override
+	public Order createEntity(OrderListDTO dto) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public Order updateEntity(OrderListDTO dto) {
+		throw new UnsupportedOperationException();
 	}
 
 	public List<OrderListDTO> getAllPaid() {
