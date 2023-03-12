@@ -1,18 +1,27 @@
 import React, {Component} from 'react';
 import CRUDService from "../Services/CRUDService";
-import AddOrderButton from '../RouteSettings/AddOrderButton'
-import BackButton from "../RouteSettings/AddOrderButton";
-import UpdateOrderButton from "../RouteSettings/UpdateOrderButton";
+import AddOrderModalComponent from "../Functions/AddOrderModal";
+import UpdateOrderModal from "../Functions/UpdateOrder";
 class ListOrderComponent extends Component {
     constructor(props){
         super(props)
 
         this.state = {
-                orders : []
+                orders : [],
+                isAddOrderActive : false,
+                isUpdateOrderActive : false,
+                shouldPageRefresh : false
+
+
         }
-        this.addOrder = this.addOrder.bind(this);
+    /*    this.addOrder = this.addOrder.bind(this);
         this.editOrder = this.editOrder.bind(this);
-        this.delOrder = this.delOrder.bind(this);
+        this.delOrder = this.delOrder.bind(this);*/
+        this.setAddOrderActive = this.setAddOrderActive.bind(this);
+
+    }
+    setAddOrderActive = () => {
+        this.setState({isAddOrderActive : true})
     }
     delOrder(id){
         CRUDService.deleteOrder(id).then( res => {
@@ -29,10 +38,12 @@ class ListOrderComponent extends Component {
     componentDidMount(){
         CRUDService.getOrders().then((res) => {
             this.setState({ orders: res.data})
-            console.log("HERE COMES JOHN CENA " + res);;
+            console.log(res.data)
         });
 
     }
+
+
 
     addOrder(){
         console.log(this.props.history + "/add-order")
@@ -42,10 +53,10 @@ class ListOrderComponent extends Component {
         return (
             <div className = "container-fluid">
                 <h2 className="text-center">Orders</h2>
-                <div className = "row">
-                    {/*<button className="btn btn-primary"
-                            onClick={this.addOrder}> Add Order</button>*/}
-                    <AddOrderButton/>.
+                <div className = "row-cols-2 gap-2" >
+                    <AddOrderModalComponent/>
+                    <button className="btn btn-success"
+                            >Refresh Table</button>
                 </div>
                 <br></br>
                 <div className = "row">
@@ -65,19 +76,13 @@ class ListOrderComponent extends Component {
                                 order =>
                                     <tr key = {order.userID}>
                                         <td> {order.userID} </td>
-                                        <td> {order.orderDateTime}</td>
+                                        <td> {order.orderDateTime.toString()}</td>
                                         <td> {order.status}</td>
                                         <td> {order.totalPrice}</td>
                                         <td>
-                                          {/*  <button onClick={ () => this.editOrder(order.id)}
-                                            className="btn btn-info">Update </button>
-                                            <button style={{marginLeft: "10px"}}
-                                                    onClick={ () => this.delOrder(order.id)}
-                                                    className="btn btn-danger"> Delete </button>
-                                            <button style={{marginLeft: "10px"}}
-                                                    onClick={ () => this.viewOrder(order.id)}
-                                                    className="btn btn-info"> View </button>*/}
-                                            <UpdateOrderButton/>
+                                            <UpdateOrderModal clientID = {order.userID}
+                                                              orderStatus = {order.status}
+                                                              orderSummary = {order.totalPrice}/>
                                         </td>
                                     </tr>
                             )

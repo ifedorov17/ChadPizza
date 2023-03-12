@@ -4,6 +4,7 @@ import HeaderComponent from "../Components/ControlPanelComponent";
 import ListOrderComponent from "../Components/ListOrderComponent";
 import Page404 from "./Page404";
 import FooterComponent from "../Components/FooterComponent";
+import AddOrderModalComponent from "../Functions/AddOrderModal";
 
 class OrdersPage extends Component {
     render() {

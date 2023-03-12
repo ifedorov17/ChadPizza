@@ -1,12 +1,15 @@
 import HeaderComponent from "../Components/ControlPanelComponent";
 import FooterComponent from "../Components/FooterComponent";
 import React, {Component} from 'react';
+import AddOrderModalComponent from "../Functions/AddOrderModal";
 
 class Page404 extends Component {
     render() {
         return (
             <div className = "container">
-                <h3>404 - Not found</h3>
+                <AddOrderModalComponent/>
+               {/*<button className='btn-primary'
+                       onClick={() => AddOrderModalComponent}> Add Order</button>*/}
             </div>
         );
     }

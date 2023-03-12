@@ -1,29 +1,32 @@
 import axios from 'axios';
-import OrderTableViewComponent from "../Components/OrderTableViewComponent";
 
-const API_BASE_URL = "http://localhost:8080/order"
+const API_BASE_URL = "http://localhost:8080"
 
 class CRUDService {
 
     //Get all orders
     getOrders(){
-        return axios.get(API_BASE_URL);
+        return axios.get(API_BASE_URL + "/order");
+    }
+    getCustomers(){
+        return axios.get(API_BASE_URL + "/customer");
+    }
+    addNewCustomer (customer) {
+        return axios.post(API_BASE_URL + "/customer", customer);
     }
 
     //Add new order
-    addOrder(order){
-        return axios.post(API_BASE_URL, order);
+    addBlankOrder(userID){
+        return axios.post(API_BASE_URL + "/order", userID);
+    }
+    //update order positions
+    updateOrder(positions) {
+        return axios.put(API_BASE_URL + "/order/position", positions)
+    }
+    updateOrderStatus(status) {
+        return axios.put(API_BASE_URL + "/order/status", status)
     }
 
-    //Get order by ID
-    getOrderById(orderID){
-        return axios.get(API_BASE_URL + '/' + orderID);
-    }
-
-    //Update order by ID
-    updateOrder(order, orderID){
-        return axios.put(API_BASE_URL + '/' + orderID, order);
-    }
 
     //Delete order by ID
     deleteOrder(orderID){
