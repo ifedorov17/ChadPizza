@@ -14,26 +14,30 @@ import java.util.List;
 @Setter
 @RequiredArgsConstructor
 @Service
-public class PizzaService {
+public class PizzaService implements IBaseService<Pizza, PizzaDTO> {
 
 	private final PizzaDAO pizzaDAO;
 
+	@Override
 	public List<PizzaDTO> getAll() {
 		return pizzaDAO.getAll().stream()
 				.map(this::entityToDto)
 				.toList();
 	}
 
+	@Override
 	public PizzaDTO getById(final Long id) {
 		return entityToDto(pizzaDAO.getById(id));
 	}
 
+	@Override
 	public Pizza createEntity(final PizzaDTO dto) {
 		final Pizza pizza = dtoToEntity(dto);
 		pizzaDAO.insert(pizza);
 		return pizza;
 	}
 
+	@Override
 	public Pizza updateEntity(final PizzaDTO dto) {
 		final Pizza pizza = pizzaDAO.getById(Long.parseLong(dto.getId()));
 		pizza.setPrice(Float.parseFloat(dto.getPrice()));
