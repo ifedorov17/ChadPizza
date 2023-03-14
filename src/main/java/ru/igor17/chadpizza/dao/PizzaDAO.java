@@ -26,6 +26,7 @@ public class PizzaDAO extends BaseDAO<Pizza> {
 				"Традиционное итальянское блюдо, известное во всем мире. \n Состав: тесто, томатный соус, сыр моцарелла."
 		);
 		margarita.setPrice(350.0f);
+		margarita.setPictureUrl("https://w1.pngwing.com/pngs/234/725/png-transparent-pizza-margherita-pizza-vegetarian-cuisine-italian-cuisine-food-pizza-capricciosa-ingredient-tomato-sauce.png");
 
 		db.put(1L, margarita);
 
@@ -38,6 +39,7 @@ public class PizzaDAO extends BaseDAO<Pizza> {
 						"с перчинкой.\n Состав: тесто, томатный соус, сыр моцарелла, колбаса пепперони."
 		);
 		pepperoni.setPrice(400.0f);
+		pepperoni.setPictureUrl("https://w7.pngwing.com/pngs/247/566/png-transparent-hawaiian-pizza-pepperoni-roll-stromboli-pizza-food-cheese-pizza-delivery.png");
 
 		db.put(2L, pepperoni);
 	}
