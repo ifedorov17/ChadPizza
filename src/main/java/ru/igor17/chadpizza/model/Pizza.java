@@ -15,4 +15,6 @@ public class Pizza extends BaseModel {
 
 	private Float price;
 
+	private String pictureUrl;
+
 }

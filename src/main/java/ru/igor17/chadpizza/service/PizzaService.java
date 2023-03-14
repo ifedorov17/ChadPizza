@@ -53,6 +53,7 @@ public class PizzaService implements IBaseService<Pizza, PizzaDTO> {
 		pizza.setName(dto.getName());
 		pizza.setDescription(dto.getDescription());
 		pizza.setPrice(Float.parseFloat(dto.getPrice()));
+		pizza.setPictureUrl(dto.getPictureUrl());
 
 		return pizza;
 	}
@@ -64,6 +65,7 @@ public class PizzaService implements IBaseService<Pizza, PizzaDTO> {
 		dto.setName(pizza.getName());
 		dto.setDescription(pizza.getDescription());
 		dto.setPrice(pizza.getPrice().toString());
+		dto.setPictureUrl(pizza.getPictureUrl());
 
 		return dto;
 	}

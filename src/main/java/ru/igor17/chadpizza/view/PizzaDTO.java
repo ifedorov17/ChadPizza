@@ -17,4 +17,6 @@ public class PizzaDTO extends BaseDTO {
 
 	private String price;
 
+	private String pictureUrl;
+
 }
