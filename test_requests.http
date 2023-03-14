@@ -1,0 +1,37 @@
+
+###
+GET http://localhost:8080/customer
+
+###
+GET http://localhost:8080/customer/1
+
+###
+GET http://localhost:8080/customer/6
+
+###
+GET http://localhost:8080/pizza
+
+###
+GET http://localhost:8080/order
+
+###
+GET http://localhost:8080/order/paid
+
+###
+POST http://localhost:8080/order
+Content-Type: application/json
+
+{
+  "customerFirstName": "Борис",
+  "customerSurname": "Джонсон",
+  "customerMiddleName": "Иванович",
+  "customerPhoneNumber": "45-133-412-8005",
+  "customerAddress": "Даунинг-стрит, 10",
+  "orderTotalPrice": "40000.00",
+  "orderPositions": [
+    {
+      "pizzaName": "Пепперони",
+      "count": 100
+    }
+  ]
+}
