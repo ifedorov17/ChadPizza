@@ -112,14 +112,16 @@ public class OrderService implements IBaseService<Order,OrderListDTO> {
 	private OrderListDTO entityToOrderListDto(final Order order) {
 		final OrderListDTO dto = new OrderListDTO();
 
-		dto.setOrderDateTime(order.getOrderDateTime().format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm")));
+		dto.setId(order.getId().toString());
+		dto.setOrderDateTime(order.getOrderDateTime().format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")));
 		dto.setOrderStatus(order.getStatus().toString());
 		dto.setOrderTotalPrice(order.getTotalPrice().toString());
 
 		final Customer customer = customerDAO.getById(order.getUserID());
 
-		dto.setCustomerFIO(customer.getFirstName() + customer.getSurname() + customer.getMiddleName());
+		dto.setCustomerFIO(customer.getFirstName() + " " + customer.getSurname() + " " + customer.getMiddleName());
 		dto.setCustomerAddress(customer.getAddress());
+		dto.setCustomerPhoneNumber(customer.getPhoneNumber());
 		dto.setOrderPositions(orderPositionDAO.getOrderPositionsByOrderId(order.getId()).stream()
 				.map(this::orderPositionToDto)
 				.toList()
