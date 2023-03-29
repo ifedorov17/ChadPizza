@@ -5,10 +5,12 @@ import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
+import jakarta.transaction.Transactional;
 import ru.igor17.chadpizza.model.BaseModel;
 
 import java.util.List;
 
+@Transactional
 public abstract class BaseDAO<T extends BaseModel>{
 
 	@PersistenceContext

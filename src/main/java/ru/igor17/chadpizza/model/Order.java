@@ -3,11 +3,14 @@ package ru.igor17.chadpizza.model;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
@@ -16,7 +19,7 @@ import java.util.List;
 
 @Getter
 @Setter
-@RequiredArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "ORDERS")
 public class Order extends BaseModel {
@@ -29,13 +32,13 @@ public class Order extends BaseModel {
 	private LocalDateTime orderDateTime;
 
 	@Column(name = "STATUS", nullable = false)
+	@Enumerated(EnumType.STRING)
 	private Status status;
 
 	@Column(name = "TOTAL_PRICE")
 	private Float totalPrice;
 
-	@OneToMany(cascade = CascadeType.ALL)
-	@JoinColumn(name = "OP_ID")
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "order")
 	private List<OrderPosition> orderPositions;
 
 }

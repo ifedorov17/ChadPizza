@@ -38,18 +38,11 @@ public class OrderService implements IBaseService<Order,OrderListDTO> {
 
 	private final PizzaDAO pizzaDAO;
 
-	public Order createEntity(final OrderAddDTO dto) {
+	public OrderListDTO createEntity(final OrderAddDTO dto) {
 		final Order order = orderAddDtoToEntity(dto);
 		orderDAO.insert(order);
-
-		List<OrderPosition> orderPositions = dto.getOrderPositions().stream()
-				.map(this::orderPositionDtoToEntity)
-				.toList();
-
-		orderPositions.forEach(op -> op.setOrder(order));
-		orderPositions.forEach(orderPositionDAO::insert);
-
-		return order;
+		OrderListDTO responseDTO = entityToOrderListDto(order);
+		return responseDTO;
 	}
 
 	@Override
@@ -106,6 +99,13 @@ public class OrderService implements IBaseService<Order,OrderListDTO> {
 		customerDAO.insert(customer);
 		order.setCustomer(customer);
 
+		List<OrderPosition> orderPositions = dto.getOrderPositions().stream()
+				.map(this::orderPositionDtoToEntity)
+				.toList();
+
+		orderPositions.forEach(op -> op.setOrder(order));
+		order.setOrderPositions(orderPositions);
+
 		return order;
 	}
 
@@ -122,10 +122,10 @@ public class OrderService implements IBaseService<Order,OrderListDTO> {
 		dto.setCustomerFIO(customer.getFirstName() + " " + customer.getSurname() + " " + customer.getMiddleName());
 		dto.setCustomerAddress(customer.getAddress());
 		dto.setCustomerPhoneNumber(customer.getPhoneNumber());
-		/*dto.setOrderPositions(orderPositionDAO.getOrderPositionsByOrderId(order.getId()).stream()
+		dto.setOrderPositions(order.getOrderPositions().stream()
 				.map(this::orderPositionToDto)
 				.toList()
-		);*/
+		);
 
 		return dto;
 	}
@@ -142,7 +142,7 @@ public class OrderService implements IBaseService<Order,OrderListDTO> {
 		final OrderPosition orderPosition = new OrderPosition();
 
 		orderPosition.setCount(dto.getCount());
-		//orderPosition.setPizza(pizzaDAO.getPizzaByName(dto.getPizzaName()));
+		orderPosition.setPizza(pizzaDAO.getPizzaByName(dto.getPizzaName()));
 
 		return orderPosition;
 	}
