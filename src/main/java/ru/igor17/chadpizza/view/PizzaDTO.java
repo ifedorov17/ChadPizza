@@ -9,7 +9,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class PizzaDTO extends BaseDTO {
 
-	private String id;
+	private Long id;
 
 	private String name;
 

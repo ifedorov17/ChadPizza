@@ -39,12 +39,17 @@ public class PizzaService implements IBaseService<Pizza, PizzaDTO> {
 
 	@Override
 	public Pizza updateEntity(final PizzaDTO dto) {
-		final Pizza pizza = pizzaDAO.getById(Long.parseLong(dto.getId()));
+		final Pizza pizza = pizzaDAO.getById(dto.getId());
 		pizza.setPrice(Float.parseFloat(dto.getPrice()));
 		pizza.setName(dto.getName());
 		pizza.setDescription(dto.getDescription());
 		pizzaDAO.update(pizza);
 		return pizza;
+	}
+
+	@Override
+	public void deleteEntity(Long id) {
+		pizzaDAO.deleteById(id);
 	}
 
 	private Pizza dtoToEntity(final PizzaDTO dto) {
@@ -61,7 +66,7 @@ public class PizzaService implements IBaseService<Pizza, PizzaDTO> {
 	private PizzaDTO entityToDto(final Pizza pizza) {
 		final PizzaDTO dto = new PizzaDTO();
 
-		dto.setId(pizza.getId().toString());
+		dto.setId(pizza.getId());
 		dto.setName(pizza.getName());
 		dto.setDescription(pizza.getDescription());
 		dto.setPrice(pizza.getPrice().toString());

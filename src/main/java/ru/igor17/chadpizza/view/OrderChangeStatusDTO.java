@@ -9,7 +9,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class OrderChangeStatusDTO extends BaseDTO {
 
-	private String orderId;
+	private Long orderId;
 
 	private String status;
 

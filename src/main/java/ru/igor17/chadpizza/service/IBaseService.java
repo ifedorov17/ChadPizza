@@ -15,4 +15,6 @@ public interface IBaseService<E extends BaseModel, T extends BaseDTO> {
 
 	public E updateEntity(final T dto);
 
+	public void deleteEntity(final Long id);
+
 }

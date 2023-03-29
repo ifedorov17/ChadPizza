@@ -41,8 +41,7 @@ public class OrderService implements IBaseService<Order,OrderListDTO> {
 	public OrderListDTO createEntity(final OrderAddDTO dto) {
 		final Order order = orderAddDtoToEntity(dto);
 		orderDAO.insert(order);
-		OrderListDTO responseDTO = entityToOrderListDto(order);
-		return responseDTO;
+		return entityToOrderListDto(order);
 	}
 
 	@Override
@@ -67,6 +66,11 @@ public class OrderService implements IBaseService<Order,OrderListDTO> {
 		throw new UnsupportedOperationException();
 	}
 
+	@Override
+	public void deleteEntity(Long id) {
+		orderDAO.deleteById(id);
+	}
+
 	public List<OrderListDTO> getAllPaid() {
 		return orderDAO.getAll().stream()
 				.filter(order -> PAID.equals(order.getStatus()))
@@ -74,11 +78,11 @@ public class OrderService implements IBaseService<Order,OrderListDTO> {
 				.toList();
 	}
 
-	public Order changeStatus(final OrderChangeStatusDTO dto) {
-		final Order order = orderDAO.getById(Long.parseLong(dto.getOrderId()));
+	public OrderListDTO changeStatus(final OrderChangeStatusDTO dto) {
+		final Order order = orderDAO.getById(dto.getOrderId());
 		order.setStatus(Status.valueOf(dto.getStatus()));
 		orderDAO.update(order);
-		return order;
+		return entityToOrderListDto(order);
 	}
 
 	private Order orderAddDtoToEntity(final OrderAddDTO dto) {
@@ -112,7 +116,7 @@ public class OrderService implements IBaseService<Order,OrderListDTO> {
 	private OrderListDTO entityToOrderListDto(final Order order) {
 		final OrderListDTO dto = new OrderListDTO();
 
-		dto.setId(order.getId().toString());
+		dto.setId(order.getId());
 		dto.setOrderDateTime(order.getOrderDateTime().format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")));
 		dto.setOrderStatus(order.getStatus().toString());
 		dto.setOrderTotalPrice(order.getTotalPrice().toString());

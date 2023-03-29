@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -52,12 +53,21 @@ public class OrderController {
 	}
 
 	@PutMapping("/status")
-	public ResponseEntity<Order> changeStatus(@RequestBody OrderChangeStatusDTO changeStatusDTO) {
+	public ResponseEntity<OrderListDTO> changeStatus(@RequestBody OrderChangeStatusDTO changeStatusDTO) {
 		if (changeStatusDTO.getOrderId() == null) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "ID mustn't be null!");
 		}
-		final Order order = orderService.changeStatus(changeStatusDTO);
+		final OrderListDTO order = orderService.changeStatus(changeStatusDTO);
 		return new ResponseEntity<>(order, HttpStatus.OK);
+	}
+
+	@DeleteMapping("/{id}")
+	public ResponseEntity<OrderListDTO> deleteOrder(@PathVariable final Long id) {
+		if (id == null) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "ID mustn't be null!");
+		}
+		orderService.deleteEntity(id);
+		return new ResponseEntity<>(new OrderListDTO(), HttpStatus.OK);
 	}
 
 }

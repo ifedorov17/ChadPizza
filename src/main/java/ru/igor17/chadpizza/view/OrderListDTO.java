@@ -11,7 +11,7 @@ import java.util.List;
 @NoArgsConstructor
 public class OrderListDTO extends BaseDTO {
 
-	private String id;
+	private Long id;
 
 	private String customerFIO;
 
