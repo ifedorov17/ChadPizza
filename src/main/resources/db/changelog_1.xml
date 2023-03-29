@@ -99,4 +99,10 @@
         </sql>
     </changeSet>
 
+    <changeSet id="add-app-seq" author="ifedorov">
+        <sql>
+            create sequence APP_SEQ INCREMENT BY 1 START WITH 100
+        </sql>
+    </changeSet>
+
 </databaseChangeLog>

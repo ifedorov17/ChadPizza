@@ -30,8 +30,8 @@ public class OrderController {
 	private final OrderService orderService;
 
 	@PostMapping
-	public ResponseEntity<Order> create(@RequestBody OrderAddDTO orderAddDTO) {
-		final Order order = orderService.createEntity(orderAddDTO);
+	public ResponseEntity<OrderListDTO> create(@RequestBody OrderAddDTO orderAddDTO) {
+		final OrderListDTO order = orderService.createEntity(orderAddDTO);
 		return new ResponseEntity<>(order, HttpStatus.OK);
 	}
 
