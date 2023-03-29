@@ -1,0 +1,12 @@
+version: '2.1'
+
+services:
+
+  test-postgres:
+    image: postgres:12.0
+    environment:
+      - POSTGRES_PASSWORD=postgres
+    expose:
+      - 5534
+    ports:
+      - 5534:5432
