@@ -122,10 +122,10 @@ public class OrderService implements IBaseService<Order,OrderListDTO> {
 		dto.setCustomerFIO(customer.getFirstName() + " " + customer.getSurname() + " " + customer.getMiddleName());
 		dto.setCustomerAddress(customer.getAddress());
 		dto.setCustomerPhoneNumber(customer.getPhoneNumber());
-		dto.setOrderPositions(orderPositionDAO.getOrderPositionsByOrderId(order.getId()).stream()
+		/*dto.setOrderPositions(orderPositionDAO.getOrderPositionsByOrderId(order.getId()).stream()
 				.map(this::orderPositionToDto)
 				.toList()
-		);
+		);*/
 
 		return dto;
 	}
@@ -142,7 +142,7 @@ public class OrderService implements IBaseService<Order,OrderListDTO> {
 		final OrderPosition orderPosition = new OrderPosition();
 
 		orderPosition.setCount(dto.getCount());
-		orderPosition.setPizza(pizzaDAO.getPizzaByName(dto.getPizzaName()));
+		//orderPosition.setPizza(pizzaDAO.getPizzaByName(dto.getPizzaName()));
 
 		return orderPosition;
 	}

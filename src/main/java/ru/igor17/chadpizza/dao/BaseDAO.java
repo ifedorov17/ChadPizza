@@ -1,34 +1,50 @@
 package ru.igor17.chadpizza.dao;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Root;
 import ru.igor17.chadpizza.model.BaseModel;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
 
 public abstract class BaseDAO<T extends BaseModel>{
 
-	protected ConcurrentHashMap<Long, T> db = new ConcurrentHashMap<>();
+	@PersistenceContext
+	protected EntityManager entityManager;
 
-	public void insert(T model) {
-		model.setId(generateID());
-		db.put(model.getId(), model);
+	private final Class<T> type;
+
+	BaseDAO(Class<T> type) {
+		this.type = type;
 	}
-
-	public void update(T model) {
-		db.put(model.getId(), model);
-	}
-
 	public T getById(Long id) {
-		return db.get(id);
+		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+		CriteriaQuery<T> cq = cb.createQuery(type);
+		Root<T> root = cq.from(type);
+		cq.select(root);
+		cq.where(cb.equal(root.get("id"), id));
+
+		return entityManager.createQuery(cq).getSingleResult();
 	}
 
 	public List<T> getAll() {
-		return new ArrayList<>(db.values());
+		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+		CriteriaQuery<T> cq = cb.createQuery(type);
+		Root<T> root = cq.from(type);
+		cq.select(root);
+		return entityManager.createQuery(cq).getResultList();
 	}
 
-	private Long generateID() {
-		return this.db.keySet().stream().max(Long::compareTo).map(l -> l += 1).orElse(1L);
+	public void insert(T model) {
+		entityManager.persist(model);
+		entityManager.flush();
+	}
+
+	public void update(T model) {
+		entityManager.merge(model);
+		entityManager.flush();
 	}
 
 }
