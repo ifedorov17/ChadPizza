@@ -24,7 +24,7 @@ import java.util.List;
 @CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("/customer")
 public class CustomerController {
-//MAY BE DEPRECATED IN FURTHER VERSIONS
+//MAY BE DELETED IN FURTHER VERSIONS
 	private final CustomerDAO customerDAO;
 
 	@GetMapping
