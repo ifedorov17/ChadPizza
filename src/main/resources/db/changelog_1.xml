@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
+
+    <changeSet id="create-pizza-table" author="ifedorov">
+        <createTable tableName="PIZZA">
+            <column autoIncrement="true" name="ID" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pizza_primary_key"/>
+            </column>
+            <column name="NAME" type="VARCHAR(255)"/>
+            <column name="DESCRIPTION" type="VARCHAR(1000)"/>
+            <column name="PRICE" type="NUMERIC(10,2)"/>
+            <column name="PICTURE_URL" type="VARCHAR(1000)"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create-customer-table" author="ifedorov">
+        <createTable tableName="CUSTOMER">
+            <column autoIncrement="true" name="ID" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="customer_primary_key"/>
+            </column>
+            <column name="FIRSTNAME" type="VARCHAR(255)"/>
+            <column name="MIDDLENAME" type="VARCHAR(255)"/>
+            <column name="SURNAME" type="VARCHAR(255)"/>
+            <column name="PHONE_NUMBER" type="VARCHAR(255)"/>
+            <column name="ADDRESS" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create-order-table" author="ifedorov">
+        <createTable tableName="ORDERS">
+            <column autoIncrement="true" name="ID" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="order_primary_key"/>
+            </column>
+            <column name="CUSTOMER_ID" type="BIGINT">
+                <constraints referencedTableName="CUSTOMER" referencedColumnNames="ID" foreignKeyName="FK_ORDER_CUSTOMER"/>
+            </column>
+            <column name="STATUS" type="VARCHAR(255)"/>
+            <column name="ORDER_DATE_TIME" type="TIMESTAMP"/>
+            <column name="TOTAL_PRICE" type="NUMERIC(10,2)"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create-order-position-table" author="ifedorov">
+        <createTable tableName="ORDER_POSITION">
+            <column autoIncrement="true" name="ID" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="order_position_primary_key"/>
+            </column>
+            <column name="ORDER_ID" type="BIGINT">
+                <constraints referencedTableName="ORDERS" referencedColumnNames="ID" foreignKeyName="FK_ORDER_POSITION_ORDER_ID"/>
+            </column>
+            <column name="PIZZA_ID" type="BIGINT">
+                <constraints referencedTableName="PIZZA" referencedColumnNames="ID" foreignKeyName="FK_ORDER_POSITION_PIZZA_ID"/>
+            </column>
+            <column name="COUNT" type="INTEGER"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="add-pizza-data" author="ifedorov">
+        <sql>
+            INSERT INTO PIZZA(ID, NAME, DESCRIPTION, PRICE, PICTURE_URL)
+            VALUES (1, 'Маргарита',
+                    'Традиционное итальянское блюдо, известное во всем мире. Состав: тесто, томатный соус, сыр моцарелла.',
+                    299.99,
+                    'https://w1.pngwing.com/pngs/234/725/png-transparent-pizza-margherita-pizza-vegetarian-cuisine-italian-cuisine-food-pizza-capricciosa-ingredient-tomato-sauce.png'),
+                   (2, 'Пепперони',
+                    'Классическая пицца Пепперони названа в честь уникальной по своим вкусовым качествам острой салями Pepperoni, которая является основным ингредиентом и задает главную вкусовую нотку с перчинкой. Состав: тесто, томатный соус, сыр моцарелла, колбаса пепперони.',
+                    319.99,
+                    'https://w7.pngwing.com/pngs/247/566/png-transparent-hawaiian-pizza-pepperoni-roll-stromboli-pizza-food-cheese-pizza-delivery.png');
+        </sql>
+    </changeSet>
+
+    <changeSet id="add-customer-data" author="ifedorov">
+        <sql>
+            INSERT INTO CUSTOMER(ID, SURNAME, FIRSTNAME, MIDDLENAME, ADDRESS, PHONE_NUMBER)
+            VALUES (1, 'Прохоров', 'Геннадий', 'Петрович', 'бульвар Гагарина, д5с9, кв27', '+74554322112'),
+                   (2, 'Патрушева', 'Ирина', 'Анатольевна', 'пер. Славы, д37, кв. 14', '+74787655443')
+        </sql>
+    </changeSet>
+
+    <changeSet id="add-order-data" author="ifedorov">
+        <sql>
+            INSERT INTO ORDERS(ID, ORDER_DATE_TIME, CUSTOMER_ID, STATUS, TOTAL_PRICE)
+            VALUES (1, TO_TIMESTAMP('2023/03/04 14:34:00', 'YYYY/MM/DD HH24:MI:SS'), 1, 'PAID', 1579.95),
+                   (2, TO_TIMESTAMP('2023/03/05 22:07:00', 'YYYY/MM/DD HH24:MI:SS'), 2, 'DRAFT', 7799.75)
+        </sql>
+    </changeSet>
+
+    <changeSet id="add-order-position-data" author="ifedorov">
+        <sql>
+            INSERT INTO ORDER_POSITION(ID, ORDER_ID, PIZZA_ID, COUNT)
+            VALUES (1, 1, 2, 4),
+                   (2, 1, 1, 1),
+                   (3, 2, 1, 10),
+                   (4, 2, 2, 15)
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>
