@@ -46,7 +46,7 @@ public class OrderService implements IBaseService<Order,OrderListDTO> {
 				.map(this::orderPositionDtoToEntity)
 				.toList();
 
-		orderPositions.forEach(op -> op.setOrderID(order.getId()));
+		orderPositions.forEach(op -> op.setOrder(order));
 		orderPositions.forEach(orderPositionDAO::insert);
 
 		return order;
@@ -104,7 +104,7 @@ public class OrderService implements IBaseService<Order,OrderListDTO> {
 		customer.setSurname(dto.getCustomerSurname());
 
 		customerDAO.insert(customer);
-		order.setUserID(customer.getId());
+		order.setCustomer(customer);
 
 		return order;
 	}
@@ -117,7 +117,7 @@ public class OrderService implements IBaseService<Order,OrderListDTO> {
 		dto.setOrderStatus(order.getStatus().toString());
 		dto.setOrderTotalPrice(order.getTotalPrice().toString());
 
-		final Customer customer = customerDAO.getById(order.getUserID());
+		final Customer customer = customerDAO.getById(order.getCustomer().getId());
 
 		dto.setCustomerFIO(customer.getFirstName() + " " + customer.getSurname() + " " + customer.getMiddleName());
 		dto.setCustomerAddress(customer.getAddress());
@@ -133,7 +133,7 @@ public class OrderService implements IBaseService<Order,OrderListDTO> {
 	private OrderPositionDTO orderPositionToDto(final OrderPosition orderPosition) {
 		final OrderPositionDTO dto = new OrderPositionDTO();
 		dto.setCount(orderPosition.getCount());
-		final Pizza pizza = pizzaDAO.getById(orderPosition.getPizzaID());
+		final Pizza pizza = pizzaDAO.getById(orderPosition.getPizza().getId());
 		dto.setPizzaName(pizza.getName());
 		return dto;
 	}
@@ -142,7 +142,7 @@ public class OrderService implements IBaseService<Order,OrderListDTO> {
 		final OrderPosition orderPosition = new OrderPosition();
 
 		orderPosition.setCount(dto.getCount());
-		orderPosition.setPizzaID(pizzaDAO.getPizzaByName(dto.getPizzaName()).getId());
+		orderPosition.setPizza(pizzaDAO.getPizzaByName(dto.getPizzaName()));
 
 		return orderPosition;
 	}
