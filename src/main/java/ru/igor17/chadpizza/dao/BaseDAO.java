@@ -49,4 +49,9 @@ public abstract class BaseDAO<T extends BaseModel>{
 		entityManager.flush();
 	}
 
+	public void deleteById(Long id) {
+		entityManager.remove(getById(id));
+		entityManager.flush();
+	}
+
 }

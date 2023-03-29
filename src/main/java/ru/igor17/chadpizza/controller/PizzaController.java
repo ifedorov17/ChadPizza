@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -45,6 +46,12 @@ public class PizzaController {
 	@PutMapping
 	public ResponseEntity<Pizza> update(@RequestBody final PizzaDTO pizzaDTO) {
 		return new ResponseEntity<>(pizzaService.updateEntity(pizzaDTO), HttpStatus.OK);
+	}
+
+	@DeleteMapping("/{id}")
+	public ResponseEntity<PizzaDTO> delete(@PathVariable final Long id) {
+		pizzaService.deleteEntity(id);
+		return new ResponseEntity<>(new PizzaDTO(), HttpStatus.OK);
 	}
 
 }
