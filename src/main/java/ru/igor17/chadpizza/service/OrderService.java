@@ -1,18 +1,18 @@
 package ru.igor17.chadpizza.service;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.springframework.stereotype.Service;
-import ru.igor17.chadpizza.dao.CustomerDAO;
-import ru.igor17.chadpizza.dao.OrderDAO;
-import ru.igor17.chadpizza.dao.OrderPositionDAO;
-import ru.igor17.chadpizza.dao.PizzaDAO;
 import ru.igor17.chadpizza.model.Customer;
 import ru.igor17.chadpizza.model.Order;
 import ru.igor17.chadpizza.model.OrderPosition;
-import ru.igor17.chadpizza.model.Pizza;
 import ru.igor17.chadpizza.model.Status;
+import ru.igor17.chadpizza.repository.ICustomerRepository;
+import ru.igor17.chadpizza.repository.IOrderPositionRepository;
+import ru.igor17.chadpizza.repository.IOrderRepository;
+import ru.igor17.chadpizza.repository.IPizzaRepository;
 import ru.igor17.chadpizza.view.OrderAddDTO;
 import ru.igor17.chadpizza.view.OrderChangeStatusDTO;
 import ru.igor17.chadpizza.view.OrderListDTO;
@@ -21,6 +21,7 @@ import ru.igor17.chadpizza.view.OrderPositionDTO;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.stream.StreamSupport;
 
 import static ru.igor17.chadpizza.model.Status.PAID;
 
@@ -30,28 +31,30 @@ import static ru.igor17.chadpizza.model.Status.PAID;
 @Service
 public class OrderService implements IBaseService<Order,OrderListDTO> {
 
-	private final OrderDAO orderDAO;
+	private final IOrderRepository orderRepository;
 
-	private final OrderPositionDAO orderPositionDAO;
+	private final IOrderPositionRepository orderPositionRepository;
 
-	private final CustomerDAO customerDAO;
+	private final ICustomerRepository customerRepository;
 
-	private final PizzaDAO pizzaDAO;
+	private final IPizzaRepository pizzaRepository;
 
 	public OrderListDTO createEntity(final OrderAddDTO dto) {
 		final Order order = orderAddDtoToEntity(dto);
-		orderDAO.insert(order);
+		orderRepository.save(order);
 		return entityToOrderListDto(order);
 	}
 
 	@Override
 	public OrderListDTO getById(final Long id) {
-		return entityToOrderListDto(orderDAO.getById(id));
+		return orderRepository.findById(id)
+				.map(this::entityToOrderListDto)
+				.orElseThrow(EntityNotFoundException::new);
 	}
 
 	@Override
 	public List<OrderListDTO> getAll() {
-		return orderDAO.getAll().stream()
+		return StreamSupport.stream(orderRepository.findAll().spliterator(), false)
 				.map(this::entityToOrderListDto)
 				.toList();
 	}
@@ -68,21 +71,22 @@ public class OrderService implements IBaseService<Order,OrderListDTO> {
 
 	@Override
 	public void deleteEntity(Long id) {
-		orderDAO.deleteById(id);
+		orderRepository.deleteById(id);
 	}
 
 	public List<OrderListDTO> getAllPaid() {
-		return orderDAO.getAll().stream()
-				.filter(order -> PAID.equals(order.getStatus()))
+		return orderRepository.findAllByStatus(PAID).stream()
 				.map(this::entityToOrderListDto)
 				.toList();
 	}
 
 	public OrderListDTO changeStatus(final OrderChangeStatusDTO dto) {
-		final Order order = orderDAO.getById(dto.getOrderId());
-		order.setStatus(Status.valueOf(dto.getStatus()));
-		orderDAO.update(order);
-		return entityToOrderListDto(order);
+		return orderRepository.findById(dto.getOrderId())
+				.map(order -> {
+					order.setStatus(Status.valueOf(dto.getStatus()));
+					return entityToOrderListDto(orderRepository.save(order));
+				})
+				.orElseThrow(EntityNotFoundException::new);
 	}
 
 	private Order orderAddDtoToEntity(final OrderAddDTO dto) {
@@ -100,7 +104,7 @@ public class OrderService implements IBaseService<Order,OrderListDTO> {
 		customer.setMiddleName(dto.getCustomerMiddleName());
 		customer.setSurname(dto.getCustomerSurname());
 
-		customerDAO.insert(customer);
+		customerRepository.save(customer);
 		order.setCustomer(customer);
 
 		List<OrderPosition> orderPositions = dto.getOrderPositions().stream()
@@ -121,15 +125,16 @@ public class OrderService implements IBaseService<Order,OrderListDTO> {
 		dto.setOrderStatus(order.getStatus().toString());
 		dto.setOrderTotalPrice(order.getTotalPrice().toString());
 
-		final Customer customer = customerDAO.getById(order.getCustomer().getId());
-
-		dto.setCustomerFIO(customer.getFirstName() + " " + customer.getSurname() + " " + customer.getMiddleName());
-		dto.setCustomerAddress(customer.getAddress());
-		dto.setCustomerPhoneNumber(customer.getPhoneNumber());
-		dto.setOrderPositions(order.getOrderPositions().stream()
-				.map(this::orderPositionToDto)
-				.toList()
-		);
+		customerRepository.findById(order.getCustomer().getId())
+				.map(customer -> {
+					dto.setCustomerFIO(customer.getFirstName() + " " + customer.getSurname() + " " + customer.getMiddleName());
+					dto.setCustomerAddress(customer.getAddress());
+					dto.setCustomerPhoneNumber(customer.getPhoneNumber());
+					dto.setOrderPositions(order.getOrderPositions().stream()
+							.map(this::orderPositionToDto)
+							.toList());
+					return dto;
+				}).orElseThrow(EntityNotFoundException::new);
 
 		return dto;
 	}
@@ -137,16 +142,19 @@ public class OrderService implements IBaseService<Order,OrderListDTO> {
 	private OrderPositionDTO orderPositionToDto(final OrderPosition orderPosition) {
 		final OrderPositionDTO dto = new OrderPositionDTO();
 		dto.setCount(orderPosition.getCount());
-		final Pizza pizza = pizzaDAO.getById(orderPosition.getPizza().getId());
-		dto.setPizzaName(pizza.getName());
-		return dto;
+		return pizzaRepository.findById(orderPosition.getPizza().getId())
+				.map(pizza -> {
+					dto.setPizzaName(pizza.getName());
+					return dto;
+				})
+				.orElseThrow(EntityNotFoundException::new);
 	}
 
 	private OrderPosition orderPositionDtoToEntity(final OrderPositionDTO dto) {
 		final OrderPosition orderPosition = new OrderPosition();
 
 		orderPosition.setCount(dto.getCount());
-		orderPosition.setPizza(pizzaDAO.getPizzaByName(dto.getPizzaName()));
+		orderPosition.setPizza(pizzaRepository.findByName(dto.getPizzaName()));
 
 		return orderPosition;
 	}

@@ -4,11 +4,13 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.springframework.stereotype.Service;
-import ru.igor17.chadpizza.dao.PizzaDAO;
 import ru.igor17.chadpizza.model.Pizza;
+import ru.igor17.chadpizza.repository.IPizzaRepository;
 import ru.igor17.chadpizza.view.PizzaDTO;
 
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @Getter
 @Setter
@@ -16,40 +18,42 @@ import java.util.List;
 @Service
 public class PizzaService implements IBaseService<Pizza, PizzaDTO> {
 
-	private final PizzaDAO pizzaDAO;
+	private final IPizzaRepository pizzaRepository;
 
 	@Override
 	public List<PizzaDTO> getAll() {
-		return pizzaDAO.getAll().stream()
+		return StreamSupport.stream(pizzaRepository.findAll().spliterator(), false)
 				.map(this::entityToDto)
-				.toList();
+				.collect(Collectors.toList());
 	}
 
 	@Override
 	public PizzaDTO getById(final Long id) {
-		return entityToDto(pizzaDAO.getById(id));
+		return pizzaRepository.findById(id).map(this::entityToDto).orElse(null);
 	}
 
 	@Override
 	public Pizza createEntity(final PizzaDTO dto) {
 		final Pizza pizza = dtoToEntity(dto);
-		pizzaDAO.insert(pizza);
+		pizzaRepository.save(pizza);
 		return pizza;
 	}
 
 	@Override
 	public Pizza updateEntity(final PizzaDTO dto) {
-		final Pizza pizza = pizzaDAO.getById(dto.getId());
-		pizza.setPrice(Float.parseFloat(dto.getPrice()));
-		pizza.setName(dto.getName());
-		pizza.setDescription(dto.getDescription());
-		pizzaDAO.update(pizza);
-		return pizza;
+
+		return pizzaRepository.findById(dto.getId())
+						.map(pizza -> {
+							pizza.setPrice(Float.parseFloat(dto.getPrice()));
+							pizza.setName(dto.getName());
+							pizza.setDescription(dto.getDescription());
+							return pizzaRepository.save(pizza);
+						}).orElse(null);
 	}
 
 	@Override
 	public void deleteEntity(Long id) {
-		pizzaDAO.deleteById(id);
+		pizzaRepository.deleteById(id);
 	}
 
 	private Pizza dtoToEntity(final PizzaDTO dto) {
