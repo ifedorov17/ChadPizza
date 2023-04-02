@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
-import ru.igor17.chadpizza.model.Order;
 import ru.igor17.chadpizza.service.OrderService;
 import ru.igor17.chadpizza.view.OrderAddDTO;
 import ru.igor17.chadpizza.view.OrderChangeStatusDTO;
@@ -24,7 +23,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = {"http://localhost:3000", "http://localhost:3001"})
 @RequestMapping("/order")
 public class OrderController {
 
