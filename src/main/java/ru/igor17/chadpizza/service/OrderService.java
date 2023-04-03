@@ -6,14 +6,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.springframework.stereotype.Service;
 import ru.igor17.chadpizza.model.Customer;
+import ru.igor17.chadpizza.model.Ingredient;
 import ru.igor17.chadpizza.model.LnkPizzaIngredient;
 import ru.igor17.chadpizza.model.Order;
 import ru.igor17.chadpizza.model.OrderPosition;
-import ru.igor17.chadpizza.model.Pizza;
 import ru.igor17.chadpizza.model.Status;
 import ru.igor17.chadpizza.repository.ICustomerRepository;
+import ru.igor17.chadpizza.repository.IIngredientRepository;
 import ru.igor17.chadpizza.repository.ILnkPizzaIngredientRepository;
-import ru.igor17.chadpizza.repository.IOrderPositionRepository;
 import ru.igor17.chadpizza.repository.IOrderRepository;
 import ru.igor17.chadpizza.repository.IPizzaRepository;
 import ru.igor17.chadpizza.view.OrderAddDTO;
@@ -24,7 +24,6 @@ import ru.igor17.chadpizza.view.OrderPositionDTO;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 import static ru.igor17.chadpizza.model.Status.PAID;
@@ -37,17 +36,18 @@ public class OrderService implements IBaseService<Order,OrderListDTO> {
 
 	private final IOrderRepository orderRepository;
 
-	private final IOrderPositionRepository orderPositionRepository;
-
 	private final ICustomerRepository customerRepository;
 
 	private final IPizzaRepository pizzaRepository;
 
 	private final ILnkPizzaIngredientRepository lnkPizzaIngredientRepository;
 
+	private final IIngredientRepository ingredientRepository;
+
 	public OrderListDTO createEntity(final OrderAddDTO dto) {
 		final Order order = orderAddDtoToEntity(dto);
 		orderRepository.save(order);
+		reduceIngredients(order);
 		return entityToOrderListDto(order);
 	}
 
@@ -95,7 +95,7 @@ public class OrderService implements IBaseService<Order,OrderListDTO> {
 				.orElseThrow(EntityNotFoundException::new);
 	}
 
-	public Boolean canOrderBeApplied(final OrderAddDTO dto) {
+	public boolean canOrderBeApplied(final OrderAddDTO dto) {
 		return dto.getOrderPositions().stream()
 				.map(opDto -> {
 					final List<LnkPizzaIngredient> lnks =
@@ -180,6 +180,20 @@ public class OrderService implements IBaseService<Order,OrderListDTO> {
 		orderPosition.setPizza(pizzaRepository.findByName(dto.getPizzaName()));
 
 		return orderPosition;
+	}
+
+	private void reduceIngredients(final Order order) {
+		order.getOrderPositions()
+				.forEach(op -> {
+					final List<LnkPizzaIngredient> lnks = lnkPizzaIngredientRepository.findLnkPizzaIngredientsByPizzaId(op.getPizza().getId());
+					for (LnkPizzaIngredient lnk : lnks) {
+						final Ingredient ingredient = lnk.getIngredient();
+						ingredient.setCount(
+								ingredient.getCount() - op.getCount() * lnk.getCount()
+						);
+						ingredientRepository.save(ingredient);
+					}
+				});
 	}
 
 }
