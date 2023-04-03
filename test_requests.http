@@ -17,11 +17,31 @@ Content-Type: application/json
   "customerMiddleName": "Иванович",
   "customerPhoneNumber": "45-133-412-8005",
   "customerAddress": "Даунинг-стрит, 10",
+  "orderTotalPrice": "1235.45",
+  "orderPositions": [
+    {
+      "pizzaName": "Маргарита",
+      "count": 2
+    }
+  ]
+}
+
+
+###
+POST http://localhost:8080/order
+Content-Type: application/json
+
+{
+  "customerFirstName": "Жир",
+  "customerSurname": "Углеводов",
+  "customerMiddleName": "Белкович",
+  "customerPhoneNumber": "+7-876-990-0909",
+  "customerAddress": "Улица Нутриентов, 200",
   "orderTotalPrice": "40000.00",
   "orderPositions": [
     {
-      "pizzaName": "Пепперони",
-      "count": 100
+      "pizzaName": "Маргарита",
+      "count": 10000
     }
   ]
 }
