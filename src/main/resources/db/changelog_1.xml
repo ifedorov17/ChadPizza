@@ -8,7 +8,7 @@
     <changeSet id="create-pizza-table" author="ifedorov">
         <createTable tableName="PIZZA">
             <column autoIncrement="true" name="ID" type="BIGINT">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="pizza_primary_key"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PIZZA_PRIMARY_KEY"/>
             </column>
             <column name="NAME" type="VARCHAR(255)"/>
             <column name="DESCRIPTION" type="VARCHAR(1000)"/>
@@ -20,7 +20,7 @@
     <changeSet id="create-customer-table" author="ifedorov">
         <createTable tableName="CUSTOMER">
             <column autoIncrement="true" name="ID" type="BIGINT">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="customer_primary_key"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="CUSTOMER_PRIMARY_KEY"/>
             </column>
             <column name="FIRSTNAME" type="VARCHAR(255)"/>
             <column name="MIDDLENAME" type="VARCHAR(255)"/>
@@ -33,7 +33,7 @@
     <changeSet id="create-order-table" author="ifedorov">
         <createTable tableName="ORDERS">
             <column autoIncrement="true" name="ID" type="BIGINT">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="order_primary_key"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="ORDER_PRIMARY_KEY"/>
             </column>
             <column name="CUSTOMER_ID" type="BIGINT">
                 <constraints referencedTableName="CUSTOMER" referencedColumnNames="ID" foreignKeyName="FK_ORDER_CUSTOMER"/>
@@ -47,7 +47,7 @@
     <changeSet id="create-order-position-table" author="ifedorov">
         <createTable tableName="ORDER_POSITION">
             <column autoIncrement="true" name="ID" type="BIGINT">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="order_position_primary_key"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="ORDER_POSITION_PRIMARY_KEY"/>
             </column>
             <column name="ORDER_ID" type="BIGINT">
                 <constraints referencedTableName="ORDERS" referencedColumnNames="ID" foreignKeyName="FK_ORDER_POSITION_ORDER_ID"/>
@@ -103,6 +103,30 @@
         <sql>
             create sequence APP_SEQ INCREMENT BY 1 START WITH 100
         </sql>
+    </changeSet>
+
+    <changeSet id="create-ingredient-table" author="ifedorov">
+        <createTable tableName="INGREDIENT">
+            <column autoIncrement="true" name="ID" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="INGREDIENT_PRIMARY_KEY"/>
+            </column>
+            <column name="NAME" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create-pizza-ingredient-lnk-table" author="ifedorov">
+        <createTable tableName="LNK_PIZZA_INGREDIENT">
+            <column autoIncrement="true" name="ID" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="LNK_PIZZA_INGREDIENT_PRIMARY_KEY"/>
+            </column>
+            <column name="PIZZA_ID" type="BIGINT">
+                <constraints referencedTableName="PIZZA" referencedColumnNames="ID" foreignKeyName="FK_LNK_PIZZA_INGREDIENT_PIZZA_ID"/>
+            </column>
+            <column name="INGREDIENT_ID" type="BIGINT">
+                <constraints referencedTableName="INGREDIENT" referencedColumnNames="ID" foreignKeyName="FK_LNK_PIZZA_INGREDIENT_INGREDIENT_ID"/>
+            </column>
+            <column name="COUNT" type="INTEGER"/>
+        </createTable>
     </changeSet>
 
 </databaseChangeLog>
