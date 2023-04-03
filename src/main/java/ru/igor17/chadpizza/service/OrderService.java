@@ -6,10 +6,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.springframework.stereotype.Service;
 import ru.igor17.chadpizza.model.Customer;
+import ru.igor17.chadpizza.model.LnkPizzaIngredient;
 import ru.igor17.chadpizza.model.Order;
 import ru.igor17.chadpizza.model.OrderPosition;
+import ru.igor17.chadpizza.model.Pizza;
 import ru.igor17.chadpizza.model.Status;
 import ru.igor17.chadpizza.repository.ICustomerRepository;
+import ru.igor17.chadpizza.repository.ILnkPizzaIngredientRepository;
 import ru.igor17.chadpizza.repository.IOrderPositionRepository;
 import ru.igor17.chadpizza.repository.IOrderRepository;
 import ru.igor17.chadpizza.repository.IPizzaRepository;
@@ -21,6 +24,7 @@ import ru.igor17.chadpizza.view.OrderPositionDTO;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 import static ru.igor17.chadpizza.model.Status.PAID;
@@ -38,6 +42,8 @@ public class OrderService implements IBaseService<Order,OrderListDTO> {
 	private final ICustomerRepository customerRepository;
 
 	private final IPizzaRepository pizzaRepository;
+
+	private final ILnkPizzaIngredientRepository lnkPizzaIngredientRepository;
 
 	public OrderListDTO createEntity(final OrderAddDTO dto) {
 		final Order order = orderAddDtoToEntity(dto);
@@ -87,6 +93,23 @@ public class OrderService implements IBaseService<Order,OrderListDTO> {
 					return entityToOrderListDto(orderRepository.save(order));
 				})
 				.orElseThrow(EntityNotFoundException::new);
+	}
+
+	public Boolean canOrderBeApplied(final OrderAddDTO dto) {
+		return dto.getOrderPositions().stream()
+				.map(opDto -> {
+					final List<LnkPizzaIngredient> lnks =
+							lnkPizzaIngredientRepository.findLnkPizzaIngredientsByPizzaId(
+									pizzaRepository.findByName(opDto.getPizzaName()).getId()
+							);
+					for (LnkPizzaIngredient lnk: lnks) {
+						if (lnk.getCount() * opDto.getCount() > lnk.getIngredient().getCount()) {
+							return false;
+						}
+					}
+					return true;
+				})
+				.allMatch(b -> b.equals(true));
 	}
 
 	private Order orderAddDtoToEntity(final OrderAddDTO dto) {

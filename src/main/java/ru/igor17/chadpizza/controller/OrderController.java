@@ -31,6 +31,9 @@ public class OrderController {
 
 	@PostMapping
 	public ResponseEntity<OrderListDTO> create(@RequestBody OrderAddDTO orderAddDTO) {
+		if (!orderService.canOrderBeApplied(orderAddDTO)) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Order cannot be applied. No ingredients!");
+		}
 		final OrderListDTO order = orderService.createEntity(orderAddDTO);
 		return new ResponseEntity<>(order, HttpStatus.OK);
 	}
