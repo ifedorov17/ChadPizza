@@ -65,11 +65,23 @@
             VALUES (1, 'Маргарита',
                     'Традиционное итальянское блюдо, известное во всем мире. Состав: тесто, томатный соус, сыр моцарелла.',
                     299.99,
-                    'https://w1.pngwing.com/pngs/234/725/png-transparent-pizza-margherita-pizza-vegetarian-cuisine-italian-cuisine-food-pizza-capricciosa-ingredient-tomato-sauce.png'),
+                    'https://img.freepik.com/premium-photo/margarita-pizza-on-white-background_565470-349.jpg'),
                    (2, 'Пепперони',
                     'Классическая пицца Пепперони названа в честь уникальной по своим вкусовым качествам острой салями Pepperoni, которая является основным ингредиентом и задает главную вкусовую нотку с перчинкой. Состав: тесто, томатный соус, сыр моцарелла, колбаса пепперони.',
                     319.99,
-                    'https://w7.pngwing.com/pngs/247/566/png-transparent-hawaiian-pizza-pepperoni-roll-stromboli-pizza-food-cheese-pizza-delivery.png');
+                    'https://img.freepik.com/premium-photo/pizza-on-white-background-isolated-above-view-delicious-homemade-pizza-top-view_105694-484.jpg'),
+                   (3, 'От шефа',
+                    'Авторская пицца от нашего бренд-шефа Степана Бескровного. Состав: тесто, томатный соус, сливочный соус, томаты, сыр моцарелла, бекон.',
+                    489.99,
+                    'https://img.freepik.com/premium-photo/fresh-tasty-pizza-on-white-background_211889-151.jpg'),
+                   (4, '4 сыра',
+                    'Пицца, покрытая комбинацией из четырёх видов сыра, расплавленных вместе. Состав: тесто, сыр моцарелла, сыр пармезан, сыр горгонзола, сыр рикотта.',
+                    429.99,
+                    'https://img.freepik.com/premium-photo/pizza-four-cheeses-isolated-on-white-background_93675-98380.jpg'),
+                   (5, 'Гавайская',
+                    'Пицца с нежным куриным филе, ананасами, моцареллой на лепешке с натуральным сливочным соусом, который придает особые нотки и изысканный аромат Состав: тесто, сливочный соус, куриное филе, консервированные ананасы.',
+                    459.99,
+                    'https://storage.yandexcloud.net/ecb/1601565069118_392x320.jpeg')
         </sql>
     </changeSet>
 
@@ -134,22 +146,49 @@
         <sql>
             INSERT INTO INGREDIENT(ID, NAME, COUNT)
             VALUES (1, 'Тесто', 1000),
-                   (2, 'Моцарелла', 250),
+                   (2, 'Сыр моцарелла', 250),
                    (3, 'Томатный соус', 10),
-                   (4, 'Колбаса Пепперони', 0)
+                   (4, 'Колбаса Пепперони', 0),
+                   (5, 'Сыр рикотта', 0),
+                   (6, 'Сыр горгонзола', 100),
+                   (7, 'Бекон', 150),
+                   (8, 'Сливочный соус', 10),
+                   (9, 'Куриное филе', 10),
+                   (10, 'Ананасы консервированные', 1000),
+                   (11, 'Томаты', 50),
+                   (12, 'Сыр пармезан', 10)
         </sql>
     </changeSet>
 
     <changeSet id="add-lnk-pizza-ingredients-data" author="ifedorov">
         <sql>
             INSERT INTO LNK_PIZZA_INGREDIENT(ID, PIZZA_ID, INGREDIENT_ID, COUNT)
-            VALUES (1, 1, 1, 1),
+            VALUES (1, 1, 1, 1),  --margherita
                    (2, 1, 2, 2),
                    (3, 1, 3, 2),
-                   (4, 2, 1, 1),
+
+                   (4, 2, 1, 1), --pepperoni
                    (5, 2, 2, 2),
                    (6, 2, 3, 2),
-                   (7, 2, 4, 1)
+                   (7, 2, 4, 1),
+
+                   (8, 3, 1, 1), --chiefs
+                   (9, 3, 2, 2),
+                   (10, 3, 3, 2),
+                   (11, 3, 8, 1),
+                   (12, 3, 11, 1),
+                   (13, 3, 7, 1),
+
+                   (14, 4, 1, 1), --4 cheeses
+                   (15, 4, 2, 1),
+                   (16, 4, 5, 1),
+                   (17, 4, 6, 1),
+                   (18, 4, 12, 1),
+
+                   (19, 5, 1, 1), --hawaiian
+                   (20, 5, 8, 1),
+                   (21, 5, 10, 1),
+                   (22, 5, 9, 1)
         </sql>
     </changeSet>
 
