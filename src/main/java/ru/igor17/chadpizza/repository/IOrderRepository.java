@@ -9,6 +9,6 @@ import java.util.List;
 @Repository
 public interface IOrderRepository extends IBaseRepository<Order> {
 
-	public List<Order> findAllByStatus(final Status status);
+	List<Order> findAllByStatus(final Status status);
 
 }

@@ -111,6 +111,7 @@
                 <constraints nullable="false" primaryKey="true" primaryKeyName="INGREDIENT_PRIMARY_KEY"/>
             </column>
             <column name="NAME" type="VARCHAR(255)"/>
+            <column name="COUNT" type="INTEGER"/>
         </createTable>
     </changeSet>
 
@@ -127,6 +128,29 @@
             </column>
             <column name="COUNT" type="INTEGER"/>
         </createTable>
+    </changeSet>
+
+    <changeSet id="add-ingredients-data" author="ifedorov">
+        <sql>
+            INSERT INTO INGREDIENT(ID, NAME, COUNT)
+            VALUES (1, 'Тесто', 1000),
+                   (2, 'Моцарелла', 250),
+                   (3, 'Томатный соус', 10),
+                   (4, 'Колбаса Пепперони', 0)
+        </sql>
+    </changeSet>
+
+    <changeSet id="add-lnk-pizza-ingredients-data" author="ifedorov">
+        <sql>
+            INSERT INTO LNK_PIZZA_INGREDIENT(ID, PIZZA_ID, INGREDIENT_ID, COUNT)
+            VALUES (1, 1, 1, 1),
+                   (2, 1, 2, 2),
+                   (3, 1, 3, 2),
+                   (4, 2, 1, 1),
+                   (5, 2, 2, 2),
+                   (6, 2, 3, 2),
+                   (7, 2, 4, 1)
+        </sql>
     </changeSet>
 
 </databaseChangeLog>
