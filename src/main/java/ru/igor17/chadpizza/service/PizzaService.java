@@ -4,12 +4,13 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.springframework.stereotype.Service;
+import ru.igor17.chadpizza.model.LnkPizzaIngredient;
 import ru.igor17.chadpizza.model.Pizza;
+import ru.igor17.chadpizza.repository.ILnkPizzaIngredientRepository;
 import ru.igor17.chadpizza.repository.IPizzaRepository;
 import ru.igor17.chadpizza.view.PizzaDTO;
 
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 @Getter
@@ -20,11 +21,14 @@ public class PizzaService implements IBaseService<Pizza, PizzaDTO> {
 
 	private final IPizzaRepository pizzaRepository;
 
+	private final ILnkPizzaIngredientRepository lnkPizzaIngredientRepository;
+
 	@Override
 	public List<PizzaDTO> getAll() {
-		return StreamSupport.stream(pizzaRepository.findAll().spliterator(), false)
+		 return StreamSupport.stream(pizzaRepository.findAll().spliterator(), false)
 				.map(this::entityToDto)
-				.collect(Collectors.toList());
+				.map(this::setIsAvailable)
+				.toList();
 	}
 
 	@Override
@@ -79,4 +83,13 @@ public class PizzaService implements IBaseService<Pizza, PizzaDTO> {
 		return dto;
 	}
 
+	private PizzaDTO setIsAvailable(final PizzaDTO pizzaDTO) {
+		pizzaDTO.setIsAvailable(
+				lnkPizzaIngredientRepository.findLnkPizzaIngredientsByPizzaId(pizzaDTO.getId())
+						.stream()
+						.map(LnkPizzaIngredient::getIngredient)
+						.allMatch(ingredient -> ingredient.getCount() > 0)
+		);
+		return pizzaDTO;
+	}
 }

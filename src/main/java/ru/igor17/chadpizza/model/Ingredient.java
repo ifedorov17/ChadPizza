@@ -14,7 +14,10 @@ import lombok.Setter;
 @Table(name = "INGREDIENT")
 public class Ingredient extends BaseModel {
 
-@Column(name = "NAME")
+	@Column(name = "NAME")
 	private String name;
+
+	@Column(name = "COUNT")
+	private Integer count;
 
 }

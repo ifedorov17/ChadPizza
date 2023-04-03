@@ -19,4 +19,6 @@ public class PizzaDTO extends BaseDTO {
 
 	private String pictureUrl;
 
+	private Boolean isAvailable;
+
 }
