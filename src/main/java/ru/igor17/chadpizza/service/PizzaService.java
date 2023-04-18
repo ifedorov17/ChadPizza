@@ -37,14 +37,14 @@ public class PizzaService implements IBaseService<Pizza, PizzaDTO> {
 	}
 
 	@Override
-	public Pizza createEntity(final PizzaDTO dto) {
+	public PizzaDTO createEntity(final PizzaDTO dto) {
 		final Pizza pizza = dtoToEntity(dto);
 		pizzaRepository.save(pizza);
-		return pizza;
+		return entityToDto(pizza);
 	}
 
 	@Override
-	public Pizza updateEntity(final PizzaDTO dto) {
+	public PizzaDTO updateEntity(final PizzaDTO dto) {
 
 		return pizzaRepository.findById(dto.getId())
 						.map(pizza -> {
@@ -52,7 +52,7 @@ public class PizzaService implements IBaseService<Pizza, PizzaDTO> {
 							pizza.setName(dto.getName());
 							pizza.setDescription(dto.getDescription());
 							return pizzaRepository.save(pizza);
-						}).orElse(null);
+						}).map(this::entityToDto).orElse(null);
 	}
 
 	@Override

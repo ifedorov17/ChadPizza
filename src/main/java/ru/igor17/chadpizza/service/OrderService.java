@@ -66,12 +66,12 @@ public class OrderService implements IBaseService<Order,OrderListDTO> {
 	}
 
 	@Override
-	public Order createEntity(OrderListDTO dto) {
+	public OrderListDTO createEntity(OrderListDTO dto) {
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public Order updateEntity(OrderListDTO dto) {
+	public OrderListDTO updateEntity(OrderListDTO dto) {
 		throw new UnsupportedOperationException();
 	}
 

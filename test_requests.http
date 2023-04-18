@@ -58,3 +58,22 @@ Content-Type: application/json
 
 ###
 DELETE http://localhost:8080/order/1
+
+###
+GET http://localhost:8080/ingredient
+
+###
+PUT http://localhost:8080/ingredient
+Content-Type: application/json
+
+
+[
+    {
+      "name" : "Томаты",
+      "count" : 10000
+    },
+    {
+      "name" : "Тесто",
+      "count" : 3
+    }
+]
