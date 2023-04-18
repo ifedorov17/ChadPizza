@@ -28,7 +28,7 @@ public class IngredientController {
 	}
 
 	@PutMapping
-	public ResponseEntity<List<IngredientDTO>> changeCount(@RequestBody final List<IngredientDTO> ingredients) {
+	public ResponseEntity<List<IngredientDTO>> addIngredients(@RequestBody final List<IngredientDTO> ingredients) {
 		ingredients.forEach(service::updateEntity);
 		return new ResponseEntity<>(ingredients, HttpStatus.OK);
 	}

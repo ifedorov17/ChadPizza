@@ -37,7 +37,7 @@ public class IngredientService implements IBaseService<Ingredient, IngredientDTO
 	@Override
 	public IngredientDTO updateEntity(IngredientDTO dto) {
 		final Ingredient ingredient = ingredientRepository.findByName(dto.getName());
-		ingredient.setCount(dto.getCount());
+		ingredient.setCount(ingredient.getCount() + dto.getCount());
 		ingredientRepository.save(ingredient);
 		return dto;
 	}
