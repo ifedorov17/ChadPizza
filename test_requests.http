@@ -46,6 +46,15 @@ Content-Type: application/json
   ]
 }
 
+###
+PUT http://localhost:8080/order/status
+Content-Type: application/json
+
+{
+  "orderId" : 1,
+  "status" : "PAID"
+}
+
 
 ###
 DELETE http://localhost:8080/order/1

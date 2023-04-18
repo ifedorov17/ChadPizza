@@ -7,14 +7,14 @@ import java.util.List;
 
 public interface IBaseService<E extends BaseModel, T extends BaseDTO> {
 
-	public T getById(final Long id);
+	T getById(final Long id);
 
-	public List<T> getAll();
+	List<T> getAll();
 
-	public E createEntity(final T dto);
+	E createEntity(final T dto);
 
-	public E updateEntity(final T dto);
+	E updateEntity(final T dto);
 
-	public void deleteEntity(final Long id);
+	void deleteEntity(final Long id);
 
 }
