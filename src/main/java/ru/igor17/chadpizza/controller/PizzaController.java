@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import ru.igor17.chadpizza.model.Pizza;
 import ru.igor17.chadpizza.service.PizzaService;
 import ru.igor17.chadpizza.view.PizzaDTO;
 
@@ -39,12 +38,12 @@ public class PizzaController {
 	}
 
 	@PostMapping
-	public ResponseEntity<Pizza> create(@RequestBody final PizzaDTO pizzaDTO) {
+	public ResponseEntity<PizzaDTO> create(@RequestBody final PizzaDTO pizzaDTO) {
 		return new ResponseEntity<>(pizzaService.createEntity(pizzaDTO), HttpStatus.OK);
 	}
 
 	@PutMapping
-	public ResponseEntity<Pizza> update(@RequestBody final PizzaDTO pizzaDTO) {
+	public ResponseEntity<PizzaDTO> update(@RequestBody final PizzaDTO pizzaDTO) {
 		return new ResponseEntity<>(pizzaService.updateEntity(pizzaDTO), HttpStatus.OK);
 	}
 

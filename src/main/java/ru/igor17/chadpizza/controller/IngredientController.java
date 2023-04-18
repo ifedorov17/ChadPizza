@@ -6,9 +6,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ru.igor17.chadpizza.model.Ingredient;
 import ru.igor17.chadpizza.service.IngredientService;
 import ru.igor17.chadpizza.view.IngredientDTO;
 
@@ -28,8 +28,9 @@ public class IngredientController {
 	}
 
 	@PutMapping
-	public ResponseEntity<Ingredient> changeCount(final IngredientDTO dto) {
-		return new ResponseEntity<>(service.updateEntity(dto), HttpStatus.OK);
+	public ResponseEntity<List<IngredientDTO>> changeCount(@RequestBody final List<IngredientDTO> ingredients) {
+		ingredients.forEach(service::updateEntity);
+		return new ResponseEntity<>(ingredients, HttpStatus.OK);
 	}
 
 }

@@ -30,28 +30,21 @@ public class IngredientService implements IBaseService<Ingredient, IngredientDTO
 	}
 
 	@Override
-	public Ingredient createEntity(IngredientDTO dto) {
+	public IngredientDTO createEntity(IngredientDTO dto) {
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public Ingredient updateEntity(IngredientDTO dto) {
+	public IngredientDTO updateEntity(IngredientDTO dto) {
 		final Ingredient ingredient = ingredientRepository.findByName(dto.getName());
 		ingredient.setCount(dto.getCount());
 		ingredientRepository.save(ingredient);
-		return ingredient;
+		return dto;
 	}
 
 	@Override
 	public void deleteEntity(Long id) {
 		throw new UnsupportedOperationException();
-	}
-
-	private Ingredient dtoToEntity(final IngredientDTO dto) {
-		 return Ingredient.builder()
-				 .count(dto.getCount())
-				 .name(dto.getName())
-				 .build();
 	}
 
 	private IngredientDTO entityToDTO(final Ingredient ingredient) {

@@ -11,9 +11,9 @@ public interface IBaseService<E extends BaseModel, T extends BaseDTO> {
 
 	List<T> getAll();
 
-	E createEntity(final T dto);
+	T createEntity(final T dto);
 
-	E updateEntity(final T dto);
+	T updateEntity(final T dto);
 
 	void deleteEntity(final Long id);
 
