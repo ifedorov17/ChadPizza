@@ -65,23 +65,23 @@
             VALUES (1, 'Маргарита',
                     'Традиционное итальянское блюдо, известное во всем мире. Состав: тесто, томатный соус, сыр моцарелла.',
                     299.99,
-                    'https://img.freepik.com/premium-photo/margarita-pizza-on-white-background_565470-349.jpg'),
+                    'https://dodopizza-a.akamaihd.net/static/Img/Products/748949429e25404ea10aab002c910d84_366x366.webp'),
                    (2, 'Пепперони',
                     'Классическая пицца Пепперони названа в честь уникальной по своим вкусовым качествам острой салями Pepperoni, которая является основным ингредиентом и задает главную вкусовую нотку с перчинкой. Состав: тесто, томатный соус, сыр моцарелла, колбаса пепперони.',
                     319.99,
-                    'https://img.freepik.com/premium-photo/pizza-on-white-background-isolated-above-view-delicious-homemade-pizza-top-view_105694-484.jpg'),
+                    'https://dodopizza-a.akamaihd.net/static/Img/Products/27c9bbd0af3a4d1d84a086d9c2f1656d_366x366.webp'),
                    (3, 'От шефа',
                     'Авторская пицца от нашего бренд-шефа Степана Бескровного. Состав: тесто, томатный соус, сливочный соус, томаты, сыр моцарелла, бекон.',
                     489.99,
-                    'https://img.freepik.com/premium-photo/fresh-tasty-pizza-on-white-background_211889-151.jpg'),
+                    'https://dodopizza-a.akamaihd.net/static/Img/Products/d6c9f93ea37649ac923e9586c034a5a0_366x366.webp'),
                    (4, '4 сыра',
                     'Пицца, покрытая комбинацией из четырёх видов сыра, расплавленных вместе. Состав: тесто, сыр моцарелла, сыр пармезан, сыр горгонзола, сыр рикотта.',
                     429.99,
-                    'https://img.freepik.com/premium-photo/pizza-four-cheeses-isolated-on-white-background_93675-98380.jpg'),
+                    'https://dodopizza-a.akamaihd.net/static/Img/Products/50555f951a6d4fd4ac0088c099eb3769_366x366.webp'),
                    (5, 'Гавайская',
                     'Пицца с нежным куриным филе, ананасами, моцареллой на лепешке с натуральным сливочным соусом, который придает особые нотки и изысканный аромат Состав: тесто, сливочный соус, куриное филе, консервированные ананасы.',
                     459.99,
-                    'https://storage.yandexcloud.net/ecb/1601565069118_392x320.jpeg')
+                    'https://dodopizza-a.akamaihd.net/static/Img/Products/0d033c8eb9b24b21828d2fdb7dc3246d_366x366.webp')
         </sql>
     </changeSet>
 
